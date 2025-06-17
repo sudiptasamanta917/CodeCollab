@@ -25,5 +25,5 @@ Clone both client and server, and configure `.env` as needed.
 Sudipta Samanta
 
 ## 📫 Contact
-Email: [your-email@example.com]  
-LinkedIn: [Your LinkedIn Profile URL]
+Email: sudiptasamanta917@gmail.com
+LinkedIn: https://github.com/sudiptasamanta917
