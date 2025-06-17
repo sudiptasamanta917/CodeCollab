@@ -6,10 +6,10 @@ async function initializeDatabase() {
     if (!db) {
         try {
             db = await mysql.createConnection({
-                host: 'localhost',
-                user: 'root',
-                password: 'Anu1',
-                database: 'code_editor'
+                host: process.env.DB_HOST,
+                user: process.env.DB_USER,
+                password: process.env.DB_PASSWORD,
+                database: process.env.DB_NAME,
             });
             console.log('MySQL Connected...');
         } catch (err) {
