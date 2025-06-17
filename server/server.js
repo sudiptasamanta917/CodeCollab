@@ -11,12 +11,20 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server, {
     cors: {
-        origin: "*", // Adjust this for more security.
+        origin: "https://sudiptacodetogether.netlify.app", // Adjust this for more security.
         methods: ["GET", "POST"],
+        credentials: true,
     },
 });
 
-app.use(cors());
+app.use(
+    cors({
+        origin: "https://sudiptacodetogether.netlify.app",
+        methods: ["GET", "POST"],
+        credentials: true,
+    })
+);
+
 app.use(bodyParser.json());
 
 const loginRoute = require("./routes/Login");
