@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './Groups.css'
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
 export const Groups = () => {
   const [groupName, setGroupName] = useState('');
   const [groups, setGroups] = useState([]);
@@ -21,7 +23,9 @@ export const Groups = () => {
       return;
     }
     try {
-      const response = await axios.get(`http://localhost:5000/api/users/${userId}/groups`);
+      const response = await axios.get(
+          `${BACKEND_URL}/api/users/${userId}/groups`
+      );
       setGroups(response.data);
     } catch (error) {
       console.error('Error fetching groups:', error);
@@ -42,7 +46,7 @@ export const Groups = () => {
     }
     
     try {
-      await axios.post('http://localhost:5000/api/creategroup', { name: groupName, userId });
+      await axios.post(`${BACKEND_URL}/api/creategroup`, { name: groupName, userId });
       setGroupName('');
       fetchGroups(); // Refresh the list of groups
     } catch (error) {

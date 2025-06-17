@@ -3,6 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import CodeEditor from '../CodeEditor/CodeEditor'; // Import the CodeEditor component
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
 export const GroupDetails = () => {
   const { groupId } = useParams();
   const [ group, setGroup] = useState({});
@@ -22,7 +24,7 @@ export const GroupDetails = () => {
     }
 
     try {
-      const response = await axios.get(`http://localhost:5000/api/groups/${groupId}`);
+      const response = await axios.get(`${BACKEND_URL}/api/groups/${groupId}`);
       console.log(response.data);
       setLoading(false);
       setGroup(response.data.group);
@@ -41,7 +43,9 @@ export const GroupDetails = () => {
 
   const handleSearch = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/searchuser`, { params: { query: friendQuery } });
+      const response = await axios.get(`${BACKEND_URL}/api/searchuser`, {
+          params: { query: friendQuery },
+      });
       setSearchResults(response.data);
     } catch (error) {
       console.error('Error searching for user:', error);
@@ -59,7 +63,9 @@ export const GroupDetails = () => {
     }
 
     try {
-      await axios.post(`http://localhost:5000/api/groups/${groupId}/addfriend`, { userId });
+      await axios.post(`${BACKEND_URL}/api/groups/${groupId}/addfriend`, {
+          userId,
+      });
       setFriendQuery('');
       setSearchResults([]);
       fetchGroupDetails();
@@ -70,7 +76,9 @@ export const GroupDetails = () => {
 
   const removeFriend = async (userId) => {
     try {
-      await axios.delete(`http://localhost:5000/api/groups/${groupId}/removefriend`, { data: { userId } });
+      await axios.delete(`${BACKEND_URL}/api/groups/${groupId}/removefriend`, {
+          data: { userId },
+      });
       setGroup(prevGroup => ({
         ...prevGroup,
         members: prevGroup.members.filter((member) => member.id !== userId)
@@ -90,7 +98,9 @@ export const GroupDetails = () => {
     }
 
     try {
-      await axios.delete(`http://localhost:5000/api/groups/${groupId}`, { data: { userId } });
+      await axios.delete(`${BACKEND_URL}/api/groups/${groupId}`, {
+          data: { userId },
+      });
       navigate('/users/:userId/groups'); // Redirect after successful deletion
     } catch (error) {
       console.error('Error deleting group:', error);

@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './style.css'
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 export const SignUp = () => {
     const [username, setUsername] = useState('');
@@ -12,7 +13,7 @@ export const SignUp = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-          const response = await axios.post('http://localhost:5000/api/signup', { username, email, password });
+          const response = await axios.post(`${BACKEND_URL}/api/signup`, { username, email, password });
           console.log('Signup successful:', response.data);
           navigate('/');
           // Handle successful signup (e.g., redirect, show success message)

@@ -3,7 +3,8 @@ import Editor from '@monaco-editor/react';
 import axios from 'axios';
 import { io } from 'socket.io-client';
 
-const socket = io('http://localhost:5000'); 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const socket = io(BACKEND_URL); 
 
 const CodeEditor = ({groupId}) => {
     const editorRef = useRef(null);
@@ -13,9 +14,9 @@ const CodeEditor = ({groupId}) => {
 
     useEffect(() => {
         // Join the room for this group
-        socket.emit('joinRoom', groupId);
+        socket.emit("joinRoom", groupId);
 
-        socket.on('codeUpdate', (newCode) => {
+        socket.on("codeUpdate", (newCode) => {
             // Prevent the update if the change came from this client
             if (isTyping) return;
 
@@ -27,20 +28,20 @@ const CodeEditor = ({groupId}) => {
 
         return () => {
             // Leave the room when the component unmounts
-            socket.emit('leaveRoom', groupId);
-            socket.off('codeUpdate');
+            socket.emit("leaveRoom", groupId);
+            socket.off("codeUpdate");
         };
     }, [groupId, isTyping]);
 
     const handleEditorChange = (value) => {
         setCode(value);
         setIsTyping(true);
-        socket.emit('codeChange', { groupId, code: value });
+        socket.emit("codeChange", { groupId, code: value });
         setTimeout(() => setIsTyping(false), 500); // Debounce typing status
     };
 
     // const saveCode = () => {
-    //     axios.post('http://localhost:5000/api/save', { content: code, group_id: groupId }) // Update URL to use your local IP
+    //     axios.post(`${BACKEND_URL}/api/save`, { content: code, group_id: groupId }) // Update URL to use your local IP
     //         .then(response => {
     //             alert(response.data);
     //         }).catch(error => {
@@ -49,12 +50,14 @@ const CodeEditor = ({groupId}) => {
     // };
 
     const runCode = () => {
-        axios.post('http://localhost:5000/api/run', { code })
-            .then(response => {
+        axios
+            .post(`${BACKEND_URL}/api/run`, { code })
+            .then((response) => {
                 setOutput(response.data.output);
                 console.log(response.data);
-            }).catch(error => {
-                console.error('There was an error running the code', error);
+            })
+            .catch((error) => {
+                console.error("There was an error running the code", error);
             });
     };
 

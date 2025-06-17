@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import "./style.css";
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 export const Login = () => {
   const [email, setEmail] = useState('');
@@ -11,7 +12,7 @@ export const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/login', { email, password });
+      const response = await axios.post(`${BACKEND_URL}/api/login`, { email, password });
       console.log('Login successful:', response.data);
       const userId = response.data.userId;
       // Store the user ID in local storage
